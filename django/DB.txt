@@ -1,0 +1,27 @@
+sudo mysql
+
+create user '계정'@'%' identified by '계정비번';  (% :원격접속가능, localhost :로컬접속만가능)
+
+grant all privileges on DB이름.*to '계정'@'%';
+
+use mysql; select user from user;
+
+create database DB이름
+
+create table TABLE이름( name VARCHAR(255) [not null], studentid INTEGER PRIMARY KEY);
+
+alter table TABLE이름 add column1 varchar(30) [option]; varchar(30) not null default '0';
+alter table TABLE이름 drop column1;
+alter table TABLE이름 change column1 NAMECHANGE TYPECHAGE;
+alter table TABLE이름 modify column1 TYPECHANGE;
+alter table TABLE이름 rename column1 NAMECHANGE;
+
+drop table TABLE이름;
+
+INSERT INTO TABLE이름 (column1, column2, ...) VALUES (value1, value2, ...)
+INSERT INTO TABLE이름 SET column1=value1, column2=value2, ...
+
+UPDATE TABLE이름 SET column1=value1, column2=value2, ... [where column0=value0];
+
+select * from TABLE명 [where column1<value1];
+

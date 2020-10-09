@@ -1,0 +1,75 @@
+Step 1 – Install Python and PIP
+$ sudo apth-get install python3 python3-pip
+$ python3 -V
+$ pip3 -V
+
+Step 2 – Install Django on Ubuntu
+$ pip3 install Django
+$ django-admin --version
+
+Step 3 – Create A Django Project
+$ cd /Django/pjt/
+$ django-admin startproject django_pjt
+$ python3 manage.py migrate
+
+Step 4 – Create Super User
+$ python3 manage.py createsuperuser
+
+Step 5 – Run Django Project
+$ vi django_pjt/settings.py
+ALLOWED HOST = ['MY IP']
+$ python3 manage.py runserver 0.0.0.0:8000
+
+Step 5-1 - runserver 유지
+$ sudo apt-get install screen
+$ screen -S screenname     (Attached->  ctrl+a+d : dettached)
+$ screen -ls   (조회)
+$ screen -r 숫자id  (dettached -> attached)
+$ python3 manage.py runserver 0:8000   (putty꺼도 유지)
+
+Step 6 – Create A Django Applicatin
+$ python3 manage.py startapp app1
+$ vi django_pjt/settings.py
+INSTALLED_APPS = [ , 'app1.apps.App1config', ]
+TIME_ZONE = 'Asia/Seoul'
+
+Step 7 – Change DB (sqlite3 -> mysql) & Create DB MODEL
+$ vi django_pjt/settings.py
+DATABASES = { 'default': { 'ENGINE' : 'django.db.backends.mysql', 'NAME': 'DB이름', 
+'USER' : '계정', 'PASSWORD': '계정비번', 'HOST': 'localhost', 'PORT': '3306', }}
+$ vi app1/models.py
+from django.db import models
+class Table(models.Model):
+	column1 = models.CharField(max_length=100)
+	column2 = models.IntegerField(default=0)
+	def __str__(self):
+		return self.column1
+$ vi app1/admin.py
+from app1.models import Table
+admin.site.register(Table)
+$ apt-get update
+$ apt-get install python3-dev libmysqlclient-dev gcc
+$ pip3 install mysqlclient     -- python3은 mysql이 지원x mysqlclient써야함.
+$ python3 manage.py makemigrations
+$ python3 manage.py migrate
+
+Step 8 – urls 등록
+$ vi django_pjt/urls.py
+from django.urls import path, include
+urlpatterns = [ ..., path('경로/', include('app1.urls')), ]    -- app1의 urls.py include하겠다.
+$ vi app1/urls.py
+from django.urls import path
+from . import views
+app_name = 'app1'
+urlpatterns = [ path('경로/<int:year>', views.loginApp, name='login'), ]    --- app1의 views.py의 loginApp 함수로 가라.
+# or from django.conf.urls import url
+#     url(r'^경로/(?P<year>[0-9]{4})/$', views.loginApp, name='login'), ]
+
+Step 9 – views 작업 (함수 만들기)
+$ vi app1/views.py
+from django.shortcuts import render
+from django.views import View
+from django.http import JsonResponse
+from django.http import HttpResponse 
+def loginApp(request):
+	return JsonResponse({"~~":"~~"}, status=200)    -- 정상 통신일 때 200코드 (에러 404)
